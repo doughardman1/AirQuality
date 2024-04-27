@@ -10,6 +10,10 @@ import time
 
 '''
 Code to download Breathe London data
+
+Exports a csv file or all the Breathe London nodes that have been recording during the given time period
+Exports a shapefile of all the nodes
+Exports csv data for PM2.5 and NO2 for the given time period
 '''
 
 api_key = input('API Key: ')
@@ -43,7 +47,7 @@ gdf.crs = original_crs
 british_national_grid = 'EPSG:27700'
 gdf = gdf.to_crs(british_national_grid)
 
-output_shapefile_path = r'list_all_sensors.shp'
+output_shapefile_path = r'/home/doug/git/AirQuality/csv/list_all_sensors.shp'
 gdf.to_file(output_shapefile_path)
 
 options = ['IPM25', 'INO2']
@@ -77,7 +81,7 @@ for index, row in all_sensors.iterrows():
         else:
             # collect data for healthy nodes
             print(rf"https://api.breathelondon.org/api/getClarityData/{row['SiteCode']}/{option}/{startDate}/{endDate}/Hourly?key={api_key}")
-            response = requests.get(rf"https://api.breathelondon.org/api/getClarityData/{row['SiteCode']}/{option}/{startDate}/{endDate}/Hourly?key={api_key}")  #can also get INO2 data
+            response = requests.get(rf"https://api.breathelondon.org/api/getClarityData/{row['SiteCode']}/{option}/{startDate}/{endDate}/Hourly?key={api_key}")
 
             # Check if the response status code is OK (200) before attempting to parse JSON.
             if response.status_code == 200:
